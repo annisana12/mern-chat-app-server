@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import logger from "./logging.js";
+import { logger } from "./logging.js";
 
-const connectDB = async () => {
+export const connectDB = async () => {
     try {
         const databaseURL = process.env.DATABASE_URL;
 
@@ -11,5 +11,3 @@ const connectDB = async () => {
         process.exit(1);
     }
 }
-
-export default connectDB;

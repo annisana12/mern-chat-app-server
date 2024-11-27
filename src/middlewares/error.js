@@ -1,4 +1,4 @@
-import logger from "../helper/logging.js";
+import { logger } from "../application/logging.js";
 import { ResponseError } from "../helper/response-error.js";
 
 const errorMiddleware = (err, req, res, next) => {
