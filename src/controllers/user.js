@@ -22,7 +22,7 @@ const register = async (req, res, next) => {
             sameSite: 'None'
         });
 
-        res.status(200).json({
+        res.status(201).json({
             data: {
                 id: user._id,
                 email: user.email,
@@ -34,6 +34,36 @@ const register = async (req, res, next) => {
     }
 }
 
+const login = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await userService.login({ email, password });
+        const token = createToken(user.email);
+
+        res.cookie("authToken", token, {
+            maxAge,
+            signed: true,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'None'
+        });
+
+        res.status(200).json({
+            data: {
+                id: user._id,
+                email: user.email,
+                profileSetup: user.profileSetup,
+                name: user.name,
+                profileImage: user.profileImage
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 export default {
-    register
+    register,
+    login
 }
