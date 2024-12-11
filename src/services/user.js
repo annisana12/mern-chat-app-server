@@ -4,11 +4,16 @@ import User from "../models/user.js";
 import { ResponseError } from "../helper/response-error.js";
 import { compare } from "bcrypt";
 
+const findUserByEmail = async (email) => {
+    const user = await User.findOne({ email }).lean();
+    return user;
+}
+
 const register = async (data) => {
     const validationSchema = userValidation.authSchema();
     const validInput = validation.validate(validationSchema, data);
 
-    const existingUser = await User.findOne({ email: validInput.email }).lean();
+    const existingUser = await findUserByEmail(validInput.email);
 
     if (existingUser) {
         throw new ResponseError(400, "Email already used", null);
@@ -22,7 +27,7 @@ const login = async (data) => {
     const validationSchema = userValidation.authSchema();
     const validInput = validation.validate(validationSchema, data);
 
-    const user = await User.findOne({ email: validInput.email }).lean();
+    const user = await findUserByEmail(validInput.email);
 
     if (!user || !(await compare(validInput.password, user.password))) {
         throw new ResponseError(401, "Email or Password is incorrect", null);
@@ -33,5 +38,6 @@ const login = async (data) => {
 
 export default {
     register,
-    login
+    login,
+    findUserByEmail
 }

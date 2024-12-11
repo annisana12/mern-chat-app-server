@@ -1,11 +1,7 @@
 import { logger } from "../application/logging.js";
 import { ResponseError } from "../helper/response-error.js";
 
-const errorMiddleware = (err, req, res, next) => {
-    if (!err) {
-        return next();
-    }
-
+export const errorMiddleware = (err, req, res, next) => {
     if (err instanceof ResponseError) {
         res
             .status(err.statusCode)
@@ -26,5 +22,3 @@ const errorMiddleware = (err, req, res, next) => {
             .end();
     }
 }
-
-export default errorMiddleware;

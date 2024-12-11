@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "../routes/user.js";
-import errorMiddleware from "../middlewares/error.js";
+import { errorMiddleware } from "../middlewares/error-middleware.js";
 
 dotenv.config();
 
