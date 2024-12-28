@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import userRouter from "../routes/user.js";
+import authRouter from "../routes/auth.js";
 import { errorMiddleware } from "../middlewares/error-middleware.js";
 
 dotenv.config();
@@ -20,6 +20,6 @@ app.use(
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET_KEY));
 
-app.use("/api/user", userRouter);
+app.use("/api", authRouter);
 
 app.use(errorMiddleware);
