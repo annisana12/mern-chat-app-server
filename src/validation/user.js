@@ -1,19 +1,30 @@
-const authSchema = () => {
-    const schema = {
-        email: {
-            type: "email",
-            normalize: true
-        },
-        password: {
-            type: "string",
-            empty: false,
-            trim: true
-        }
-    };
+const authSchema = {
+    email: {
+        type: "email",
+        normalize: true
+    },
+    password: {
+        type: "string",
+        empty: false,
+        trim: true
+    }
+}
 
-    return schema;
-};
+const profileSchema = {
+    name: {
+        type: "string",
+        empty: false,
+        trim: true
+    },
+    bgColor: {
+        type: "string",
+        empty: false,
+        trim: true,
+        lowercase: true
+    }
+}
 
 export default {
-    authSchema
+    authSchema,
+    profileSchema
 }

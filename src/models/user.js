@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    bgColor: {
+        type: String,
+        required: false
+    },
     profileImage: {
         type: String,
         required: false
@@ -25,7 +29,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-userSchema.pre("save", async function() {
+userSchema.pre("save", async function () {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
 })

@@ -70,6 +70,7 @@ describe("POST /api/login", () => {
         password: 'Supertest@latest#123',
         profileSetup: true,
         name: 'Supertest',
+        bgColor: 'bg-violet-600',
         profileImage: 'https://unsplash.com/photos/the-sun-is-setting-over-a-field-of-flowers-p0kzFn1BGOk'
     };
 
@@ -94,6 +95,7 @@ describe("POST /api/login", () => {
         expect(response.body.data.email).toBe(userData.email);
         expect(response.body.data.profileSetup).toBe(userData.profileSetup);
         expect(response.body.data.name).toBe(userData.name);
+        expect(response.body.data.bgColor).toBe(userData.bgColor);
         expect(response.body.data.profileImage).toBe(userData.profileImage);
         expect(response.body.accessToken).toBeDefined();
         expect(response.get('Set-Cookie')).toBeDefined();
@@ -143,9 +145,7 @@ describe("POST /api/refresh-token", () => {
     const userData = {
         email: 'testlogin@gmail.com',
         password: 'Supertest@latest#123',
-        profileSetup: true,
-        name: 'Supertest',
-        profileImage: 'https://unsplash.com/photos/the-sun-is-setting-over-a-field-of-flowers-p0kzFn1BGOk'
+        profileSetup: false
     };
 
     beforeAll(async () => {
@@ -177,6 +177,7 @@ describe("POST /api/refresh-token", () => {
         expect(response.body.data.email).toBe(userData.email);
         expect(response.body.data.profileSetup).toBe(userData.profileSetup);
         expect(response.body.data.name).toBe(userData.name);
+        expect(response.body.data.bgColor).toBe(userData.bgColor);
         expect(response.body.data.profileImage).toBe(userData.profileImage);
     })
 
