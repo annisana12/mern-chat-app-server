@@ -126,8 +126,12 @@ describe("GET /api/user/profile-image", () => {
             .get("/api/user/profile-image")
             .set('Authorization', `Bearer ${accessToken}`)
 
+        const imagePath = `${userId}.jpg`;
+
         expect(response.status).toBe(200);
-        expect(response.body.data).toContain(`${process.env.SUPABASE_PROJECT_URL}/storage/v1/object/sign/avatars/${userId}.jpg`);
+        expect(response.body.data).toContain(`${process.env.SUPABASE_PROJECT_URL}/storage/v1/object/sign/avatars/${imagePath}`);
+
+        await deleteFile('avatars', [imagePath]);
     })
 
     it("should return null", async () => {
