@@ -12,28 +12,32 @@ const findUserById = async (id) => {
     return user;
 }
 
+const saveProfileImage = async (fileBuffer, userId) => {
+    const resizedImage = await sharp(fileBuffer)
+        .resize(300, 300)
+        .toFormat('jpg')
+        .jpeg({ mozjpeg: true })
+        .toBuffer();
+
+    const path = `${userId}.jpg`;
+
+    const options = {
+        cacheControl: '3600',
+        contentType: 'image/jpeg',
+        upsert: true
+    };
+
+    const uploadedImage = await uploadFile('avatars', path, resizedImage, options);
+
+    return uploadedImage.path;
+}
+
 const updateProfile = async (data) => {
     const { name, bgColor, file, userId } = data;
     let imagePath;
 
     if (file) {
-        const resizedImage = await sharp(file.buffer)
-            .resize(300, 300)
-            .toFormat('jpg')
-            .jpeg({ mozjpeg: true })
-            .toBuffer();
-
-        const path = `${userId}.jpg`;
-
-        const options = {
-            cacheControl: '3600',
-            contentType: 'image/jpeg',
-            upsert: true
-        };
-
-        const uploadedImage = await uploadFile('avatars', path, resizedImage, options);
-
-        imagePath = uploadedImage.path;
+        imagePath = await saveProfileImage(file.buffer, userId);
     }
 
     const user = await User.findByIdAndUpdate(
@@ -81,6 +85,7 @@ const getProfileImageUrl = async (userId) => {
 export default {
     findUserByEmail,
     findUserById,
+    saveProfileImage,
     updateProfile,
     getProfileImageUrl
 }
