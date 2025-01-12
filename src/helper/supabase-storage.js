@@ -36,7 +36,18 @@ export const createFileSignUrl = async (bucket, path, expiresIn = 3600, options 
             options
         )
 
-    console.log(data);
+    if (error) {
+        throw new ResponseError(400, error.message, error.details);
+    }
+
+    return data;
+}
+
+export const deleteFile = async (bucket, paths) => {
+    const { data, error } = await supabase
+        .storage
+        .from(bucket)
+        .remove(paths)
 
     if (error) {
         throw new ResponseError(400, error.message, error.details);

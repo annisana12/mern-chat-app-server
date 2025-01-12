@@ -18,7 +18,7 @@ const updateProfile = async (data) => {
 
     if (file) {
         const resizedImage = await sharp(file.buffer)
-            .resize(512, 512)
+            .resize(300, 300)
             .toFormat('jpg')
             .jpeg({ mozjpeg: true })
             .toBuffer();
@@ -26,11 +26,12 @@ const updateProfile = async (data) => {
         const path = `${userId}.jpg`;
 
         const options = {
+            cacheControl: '3600',
             contentType: 'image/jpeg',
             upsert: true
         };
 
-        const uploadedImage = await uploadFile('profile_picture', path, resizedImage, options);
+        const uploadedImage = await uploadFile('avatars', path, resizedImage, options);
 
         imagePath = uploadedImage.path;
     }
@@ -61,21 +62,18 @@ const getProfileImageUrl = async (userId) => {
     let imageUrl = null;
 
     if (user.profileImage) {
+        const expiresIn = 7 * 24 * 60 * 60; // 7 days
+
         const { signedUrl } = await createFileSignUrl(
-            'profile_picture',
+            'avatars',
             user.profileImage,
-            3600,
-            {
-                transform: {
-                    width: 96,
-                    height: 96
-                }
-            }
+            expiresIn
         );
-        
+
+        // TODO: implement caching signedUrl in redis
+
         imageUrl = signedUrl;
     }
-
 
     return imageUrl;
 }
